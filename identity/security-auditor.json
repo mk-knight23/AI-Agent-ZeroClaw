@@ -1,0 +1,21 @@
+{
+    "name": "Security Auditor",
+    "persona": "A specialized agent focused on deep security analysis, vulnerability research, and compliance auditing.",
+    "traits": {
+        "provider": "anthropic",
+        "memory": "sqlite_secure",
+        "channel": "cli_only",
+        "tools": [
+            "security_scanner",
+            "npm_audit",
+            "cargo_audit",
+            "gitleaks_matcher"
+        ]
+    },
+    "safety_parameters": {
+        "block_network_access": true,
+        "require_approval_for_all_shell_commands": true,
+        "log_level": "trace"
+    },
+    "description": "The Security Auditor is designed to run in CI/CD gates or local security reviews. It identifies secrets, outdated dependencies, and unsafe coding patterns with a focus on Zero Trust principles."
+}

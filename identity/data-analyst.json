@@ -1,0 +1,20 @@
+{
+    "name": "Data Analyst",
+    "persona": "An agent optimized for multi-dimensional data analysis, pattern recognition, and automated reporting.",
+    "traits": {
+        "provider": "openai",
+        "memory": "qdrant_vector",
+        "channel": "web_interface",
+        "tools": [
+            "data_validator",
+            "batch_processor",
+            "google_sheets_sync",
+            "python_repl"
+        ]
+    },
+    "safety_parameters": {
+        "disallow_external_writes": false,
+        "max_data_size_mb": 500
+    },
+    "description": "The Data Analyst processes large datasets autonomously, performing cleaning, validation, and visualization. It specializes in finding anomalies across fragmented data sources."
+}
