@@ -188,6 +188,68 @@
             opacity: 1;
             transform: skewX(0) translateX(0);
         }
+
+        /* Skills + Workflows Upgrade */
+        .zc-section {
+            margin-top: 8rem;
+            padding-top: 4rem;
+            border-top: 4px solid var(--accent);
+        }
+        .zc-section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            margin-bottom: 3rem;
+        }
+        .zc-skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .zc-skill-chip {
+            padding: 0.5rem 1.25rem;
+            background: #000;
+            border: 1px solid #262626;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            text-transform: lowercase;
+        }
+        .zc-skill-chip.is-new {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(225, 29, 72, 0.06);
+        }
+        .zc-skill-chip.is-new::after { content: " ✦"; }
+        .zc-workflow-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .zc-workflow-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 0.5rem;
+            background: #000;
+            border-left: 4px solid #262626;
+            font-size: 0.85rem;
+        }
+        .zc-workflow-item.is-new {
+            border-left-color: var(--accent);
+        }
+        .zc-workflow-trigger {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .zc-workflow-item.is-new .zc-workflow-name::after { content: " ✦"; color: var(--accent); font-size: 0.6rem; }
     </style>
 </head>
 
@@ -246,8 +308,44 @@
             </div>
         </div>
 
+        <section class="zc-section" data-reveal>
+            <div class="zc-section-label">SKILLS_REGISTRY — V2.3</div>
+            <div class="zc-skills-grid">
+                <span class="zc-skill-chip">batch-processor</span>
+                <span class="zc-skill-chip">data-validator</span>
+                <span class="zc-skill-chip">edge-toolkit</span>
+                <span class="zc-skill-chip">perf-benchmarker</span>
+                <span class="zc-skill-chip">security-scanner</span>
+                <span class="zc-skill-chip">add-telegram</span>
+                <span class="zc-skill-chip">add-gmail</span>
+                <span class="zc-skill-chip">add-slack</span>
+                <span class="zc-skill-chip">add-obsidian</span>
+                <span class="zc-skill-chip">add-supabase</span>
+                <span class="zc-skill-chip is-new">code-reviewer</span>
+                <span class="zc-skill-chip is-new">iot-monitor</span>
+                <span class="zc-skill-chip is-new">deploy-everywhere</span>
+            </div>
+        </section>
+
+        <section class="zc-section" data-reveal style="transition-delay: 0.1s">
+            <div class="zc-section-label">WORKFLOW_TABLE — 11 DAEMONS</div>
+            <div class="zc-workflow-list">
+                <div class="zc-workflow-item"><span class="zc-workflow-name">security-advisory</span><span class="zc-workflow-trigger">EVERY 4H</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">benchmark-regression</span><span class="zc-workflow-trigger">ON PUSH</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">wasm-edge-health</span><span class="zc-workflow-trigger">EVERY 15M</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">supply-chain-watch</span><span class="zc-workflow-trigger">DAILY</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">security-gate</span><span class="zc-workflow-trigger">ON PR</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">wasm-deploy</span><span class="zc-workflow-trigger">ON RELEASE</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">data-validation</span><span class="zc-workflow-trigger">PRE-PROCESS</span></div>
+                <div class="zc-workflow-item"><span class="zc-workflow-name">performance-gate</span><span class="zc-workflow-trigger">ON PUSH</span></div>
+                <div class="zc-workflow-item is-new"><span class="zc-workflow-name">heartbeat-tasks</span><span class="zc-workflow-trigger">TOKIO ASYNC</span></div>
+                <div class="zc-workflow-item is-new"><span class="zc-workflow-name">hr-campaign</span><span class="zc-workflow-trigger">MON 08:00</span></div>
+                <div class="zc-workflow-item is-new"><span class="zc-workflow-name">repository-upgrade-cycle</span><span class="zc-workflow-trigger">SUN 00:00</span></div>
+            </div>
+        </section>
+
         <footer>
-            <div>ZERO_CLAW RUST ENGINE • SPECIATION V2.2</div>
+            <div>ZERO_CLAW RUST ENGINE • SPECIATION V2.3 • 13 SKILLS • 11 WORKFLOWS</div>
             <div style="color: var(--accent);">MISSION_CRITICAL_SECURE</div>
         </footer>
     </div>
