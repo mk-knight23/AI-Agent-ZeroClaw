@@ -4,479 +4,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeroClaw | Mission Critical Performance Daemon</title>
+    <title>ZeroClaw | The Security Guardian</title>
+    <meta name="description"
+        content="ZeroClaw is the high-security Rust-native evolution of the AI-CLAW-ECOSYSTEM, built for mission-critical reliability and sub-10ms performance.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <style>
         :root {
-            --bg: #050505;
-            --accent: #ff003c;
-            --accent-glow: rgba(255, 0, 60, 0.4);
-            --surface: #0f0f0f;
-            --surface-bright: #1a1a1a;
-            --text-main: #ffffff;
-            --text-muted: #737373;
-            --border: #262626;
+            --bg-primary: #020617;
+            --bg-secondary: #0f172a;
+            --accent: #dea584; /* Rust Accent */
+            --accent-glow: rgba(222, 165, 132, 0.4);
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(222, 165, 132, 0.3);
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --radius-md: 12px;
+            --radius-lg: 24px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Space Grotesk', sans-serif;
-            line-height: 1.5;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; position: relative; }
+
+        /* Ambient Background */
+        .matrix-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 1) 100%);
+            z-index: -1;
+        }
+
+        .grid-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(222, 165, 132, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(222, 165, 132, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px; z-index: -1;
+            mask-image: radial-gradient(ellipse at center, black, transparent 90%);
         }
 
         /* Navigation */
-        nav {
-            padding: 2rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
+        .sticky-nav {
+            position: sticky; top: 0; width: 100%; background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+            z-index: 1000; padding: 1rem 0;
         }
 
-        .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: -0.05em;
-            color: var(--accent);
+        .nav-container {
+            max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        .evo-links {
-            display: flex;
-            gap: 1.5rem;
+        .nav-logo {
+            font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.1rem;
+            color: var(--text-primary); text-decoration: none;
         }
 
-        .evo-link {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: var(--transition);
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 1.5rem; }
+
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+            font-weight: 500; transition: var(--transition); font-family: 'JetBrains Mono', monospace;
         }
 
-        .evo-link:hover {
-            color: var(--text-main);
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Hero Section */
+        .hero { padding: 8rem 0 4rem; text-align: left; }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; padding: 0.5rem 1.25rem;
+            background: rgba(222, 165, 132, 0.05); border: 1px solid rgba(222, 165, 132, 0.15);
+            border-radius: 99px; font-size: 0.7rem; font-weight: 600; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 2.5rem;
         }
 
-        .evo-link.active {
-            color: var(--accent);
+        .hero-title {
+            font-size: clamp(3.5rem, 8vw, 6rem); font-weight: 800; line-height: 1.05;
+            letter-spacing: -0.04em; margin-bottom: 2rem;
         }
 
-        /* Hero */
-        header {
-            padding: 10rem 0 6rem 0;
-            position: relative;
+        .hero-title span { color: var(--accent); }
+
+        .hero-desc { font-size: 1.25rem; color: var(--text-muted); max-width: 700px; margin-bottom: 3rem; }
+
+        /* Section Layouts */
+        .section { padding: 6rem 0; border-bottom: 1px solid var(--border); }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.4em; display: block; margin-bottom: 1rem;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--accent);
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 2rem;
+        h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -0.02em; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+
+        .card {
+            background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 3rem; backdrop-filter: blur(8px);
         }
 
-        h1 {
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 800;
-            line-height: 0.9;
-            letter-spacing: -0.04em;
-            margin-bottom: 2rem;
+        /* Architect Style */
+        .architect-card { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
+
+        .stat-item { text-align: left; }
+
+        .stat-value { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+
+        .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 600; }
+
+        /* Technical Specs */
+        .tech-list { list-style: none; margin-top: 2rem; }
+
+        .tech-item {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
         }
 
-        h1 span {
-            color: var(--accent);
-            display: block;
-            text-shadow: 0 0 30px var(--accent-glow);
-        }
+        .tech-item::before { content: "→"; color: var(--accent); }
 
-        .hero-desc {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 600px;
-        }
+        /* Animations */
+        [data-reveal] { opacity: 0; transform: translateY(20px); transition: var(--transition); }
+        [data-reveal].active { opacity: 1; transform: translateY(0); }
 
-        /* Identity Section */
-        .section-header {
-            margin-bottom: 4rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
+        footer { padding: 4rem 0; text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
 
-        .section-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-        }
-
-        .identity-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 8rem;
-        }
-
-        .identity-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 3rem;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .identity-card:hover {
-            border-color: var(--accent);
-            background: var(--surface-bright);
-            transform: translateY(-5px);
-        }
-
-        .identity-icon {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent);
-        }
-
-        .identity-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .identity-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .identity-meta {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* Stats / Benchmarks */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            margin-bottom: 8rem;
-        }
-
-        .stat-card {
-            background: var(--bg);
-            padding: 3rem;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
-
-        /* Skills Registry */
-        .skills-section {
-            margin-bottom: 8rem;
-        }
-
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .skill-tag {
-            padding: 0.75rem 1.5rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            transition: var(--transition);
-        }
-
-        .skill-tag:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
-
-        .skill-tag.featured {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        /* Workflows */
-        .workflow-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 10rem;
-        }
-
-        .workflow-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem;
-            background: var(--surface);
-            border-left: 2px solid var(--border);
-            transition: var(--transition);
-        }
-
-        .workflow-item:hover {
-            border-left-color: var(--accent);
-            background: var(--surface-bright);
-        }
-
-        .workflow-name {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .workflow-trigger {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0.3rem 0.6rem;
-            border: 1px solid var(--border);
-        }
-
-        footer {
-            padding: 6rem 0;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .footer-status {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 0 1.5rem; }
-            .workflow-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 4rem; }
-        }
-
-        [data-reveal] {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-
-        [data-reveal].active {
-            opacity: 1;
-            transform: translateY(0);
+        @media (max-width: 1024px) {
+            .grid-2 { grid-template-columns: 1fr; gap: 3rem; }
+            .architect-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 
 <body>
+    <div class="matrix-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <nav class="sticky-nav">
+        <div class="nav-container">
+            <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/" class="nav-logo">AI-<span>CLAW</span>-ECOSYSTEM</a>
+            <div class="nav-links">
+                <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/">Hub</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-OpenClaw/">OpenClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-ZeroClaw/">ZeroClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-NanoClaw/">NanoClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-PicoClaw/">PicoClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-Nanobot/">Nanobot</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
-        <nav>
-            <div class="logo">ZERO_CLAW</div>
-            <div class="evo-links">
-                <a href="#" class="evo-link">Genesis</a>
-                <a href="#" class="evo-link">Nanobot</a>
-                <a href="#" class="evo-link">NanoClaw</a>
-                <a href="#" class="evo-link">PicoClaw</a>
-                <a href="#" class="evo-link active">ZeroClaw</a>
-            </div>
-        </nav>
-
-        <header>
-            <div class="badge" data-reveal>EVO-04: PERFORMANCE DAEMON</div>
-            <h1 data-reveal style="transition-delay: 0.1s">
-                Mission Critical <span>Safety.</span>
+        <header class="hero">
+            <div class="hero-badge" data-reveal>Performance Daemon / EVO-04</div>
+            <h1 class="hero-title" data-reveal style="transition-delay: 0.1s">
+                Mission Critical<br><span>Safety.</span>
             </h1>
             <p class="hero-desc" data-reveal style="transition-delay: 0.2s">
-                ZeroClaw is the Rust-native evolution of the AI-Claw Ecosystem. Built for sub-10ms execution, zero-unsafe memory safety, and autonomous security auditing.
+                ZeroClaw is the high-security Rust-native evolution of the ecosystem. Built for mission-critical reliability, memory safety, and extreme execution performance.
             </p>
         </header>
 
-        <div class="stats-grid" data-reveal>
-            <div class="stat-card">
-                <div class="stat-value">8ms</div>
-                <div class="stat-label">Avg Latency</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">ZERO</div>
-                <div class="stat-label">Unsafe Blocks</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">13</div>
-                <div class="stat-label">Core Skills</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">11</div>
-                <div class="stat-label">Active Daemons</div>
-            </div>
-        </div>
-
-        <section class="identity-section">
-            <div class="section-header" data-reveal>
-                <div class="section-label">Agent Identities</div>
-            </div>
-            <div class="identity-grid">
-                <div class="identity-card" data-reveal>
-                    <div class="identity-icon">🛡️</div>
-                    <div class="identity-name">Security Auditor</div>
-                    <div class="identity-desc">Specialized in deep vulnerability research, secret detection, and compliance auditing with Zero Trust principles.</div>
-                    <div class="identity-meta">
-                        <span>Anthropic V3</span>
-                        <span>Trace Logging</span>
-                    </div>
+        <section class="section">
+            <div class="card architect-card" data-reveal>
+                <div class="architect-info">
+                    <span class="section-tag">THE ARCHITECT</span>
+                    <h2>Kazi Musharraf</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">AI Engineer & Security Strategist.</p>
+                    <p>ZeroClaw is Kazi's designated "Shield Agent," utilized within his 134-agent RALPH system to handle high-stakes security operations and performance-sensitive infrastructure tasks.</p>
                 </div>
-                <div class="identity-card" data-reveal style="transition-delay: 0.1s">
-                    <div class="identity-icon">📊</div>
-                    <div class="identity-name">Data Analyst</div>
-                    <div class="identity-desc">Optimized for pattern recognition and automated reporting across large, fragmented datasets.</div>
-                    <div class="identity-meta">
-                        <span>OpenAI GPT-4</span>
-                        <span>Qdrant Memory</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="stat-item">
+                        <span class="stat-value">8ms</span>
+                        <span class="stat-label">Audit Latency</span>
                     </div>
-                </div>
-                <div class="identity-card" data-reveal style="transition-delay: 0.2s">
-                    <div class="identity-icon">🔐</div>
-                    <div class="identity-name">Privacy Guardian</div>
-                    <div class="identity-desc">Enforces AIEOS identity standards and manages secure credential rotation across the gateway.</div>
-                    <div class="identity-meta">
-                        <span>Rust Stable</span>
-                        <span>AIEOS Core</span>
+                    <div class="stat-item">
+                        <span class="stat-value">Zero</span>
+                        <span class="stat-label">Unsafe Blocks</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="skills-section">
-            <div class="section-header" data-reveal>
-                <div class="section-label">Skill Registry</div>
-            </div>
-            <div class="skills-container" data-reveal>
-                <span class="skill-tag featured">perf-benchmarker</span>
-                <span class="skill-tag featured">security-scanner</span>
-                <span class="skill-tag">code-reviewer</span>
-                <span class="skill-tag">batch-processor</span>
-                <span class="skill-tag">data-validator</span>
-                <span class="skill-tag">edge-toolkit</span>
-                <span class="skill-tag">iot-monitor</span>
-                <span class="skill-tag">deploy-everywhere</span>
-                <span class="skill-tag">add-gmail</span>
-                <span class="skill-tag">add-slack</span>
-                <span class="skill-tag">add-telegram</span>
-                <span class="skill-tag">add-supabase</span>
-                <span class="skill-tag">add-obsidian</span>
+        <section class="section">
+            <div class="grid-2">
+                <div data-reveal>
+                    <span class="section-tag">TECHNICAL DOCUMENTATION</span>
+                    <h2>Rust-Native Core</h2>
+                    <p style="color: var(--text-muted);">Leveraging Rust's ownership model for absolute memory safety and zero-cost abstractions.</p>
+                    <ul class="tech-list">
+                        <li class="tech-item">Tokio-powered Async Runtime</li>
+                        <li class="tech-item">Mission-Critical Error Handling</li>
+                        <li class="tech-item">Sub-10ms Execution Pattern</li>
+                        <li class="tech-item">OpenClaw Integration via gRPC</li>
+                    </ul>
+                </div>
+                <div class="card" data-reveal style="transition-delay: 0.1s">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">Orchestrated Security</h3>
+                    <p>ZeroClaw integrates seamlessly with OpenClaw, acting as the primary security layer for the matrix. It intercepts all outbound commands to verify compliance and detect potential vulnerabilities in real-time.</p>
+                </div>
             </div>
         </section>
 
-        <section class="workflow-section">
-            <div class="section-header" data-reveal>
-                <div class="section-label">Autonomous Workflows</div>
+        <section class="section">
+            <div class="grid-2">
+                <div class="card" data-reveal>
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">Automated Auditing</h3>
+                    <p>ZeroClaw performs deep recursive scans of repository history, identifying leaked secrets and vulnerable dependency patterns with an average audit time of just 8ms per node.</p>
+                </div>
+                <div data-reveal style="transition-delay: 0.1s">
+                    <span class="section-tag">REAL-WORLD AUTOMATION</span>
+                    <h2>8ms Security Gates</h2>
+                    <p>In the RALPH production pipeline, ZeroClaw serves as the ultimate gatekeeper, preventing any non-compliant code from entering the 64-project portfolio through ultra-fast automated audits.</p>
+                </div>
             </div>
-            <div class="workflow-grid" data-reveal>
-                <div class="workflow-item">
-                    <span class="workflow-name">ci-security-gate</span>
-                    <span class="workflow-trigger">ON PR</span>
-                </div>
-                <div class="workflow-item">
-                    <span class="workflow-name">benchmark-regression</span>
-                    <span class="workflow-trigger">ON PUSH</span>
-                </div>
-                <div class="workflow-item">
-                    <span class="workflow-name">daily-github-digest</span>
-                    <span class="workflow-trigger">08:00 UTC</span>
-                </div>
-                <div class="workflow-item">
-                    <span class="workflow-name">repository-upgrade-cycle</span>
-                    <span class="workflow-trigger">WEEKLY</span>
-                </div>
-                <div class="workflow-item">
-                    <span class="workflow-name">heartbeat-tasks</span>
-                    <span class="workflow-trigger">TOKIO ASYNC</span>
-                </div>
-                <div class="workflow-item">
-                    <span class="workflow-name">edge-deployment</span>
-                    <span class="workflow-trigger">AUTO</span>
-                </div>
+        </section>
+
+        <section class="section" style="border: none;">
+            <div style="text-align: center;" data-reveal>
+                <span class="section-tag">THE STORY</span>
+                <h2>The High-Security Evolution</h2>
+                <p style="max-width: 800px; margin: 0 auto; color: var(--text-muted);">
+                    As the matrix grew, the need for a specialized security node became clear. ZeroClaw was evolved from the OpenClaw lineage to provide a hardened, performance-first guardian that ensures the integrity of Kazi's entire autonomous intelligence ecosystem.
+                </p>
             </div>
         </section>
 
         <footer>
-            <div class="footer-logo">ZERO_CLAW RUST ENGINE V2.3.0</div>
-            <div class="footer-status">SYSTEM_STABLE // NO_VULNS_FOUND</div>
+            AUTHORIZED BY KAZI MUSHARRAF • ZEROCLAW V2.3 • © 2025
         </footer>
     </div>
 
     <script>
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('active');
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
