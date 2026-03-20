@@ -1,291 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeroClaw | The Security Guardian</title>
-    <meta name="description"
-        content="ZeroClaw is the high-security performance daemon of the AI-CLAW-ECOSYSTEM, built for mission-critical reliability and sub-10ms performance.">
-
+    <title>ZeroClaw | Memory-Safe Security Daemon</title>
+    <meta name="description" content="Official documentation for ZeroClaw, the high-performance security auditor for the AI-CLAW-ECOSYSTEM.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-tertiary: #f1f5f9;
-            --accent: #0ea5e9;
-            --accent-hover: #0284c7;
-            --accent-soft: #f0f9ff;
-            --text-primary: #0f172a;
-            --text-secondary: #334155;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --border-soft: #f1f5f9;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 20px;
+            --primary: #0066FF;
+            --primary-hover: #0052CC;
+            --bg-dark: #0A0B10;
+            --text-main: #1A1C1E;
+            --text-muted: #475467;
+            --border: #E4E7EC;
+            --radius: 8px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--text-main); line-height: 1.6; }
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            line-height: 1.6;
-        }
+        nav { border-bottom: 1px solid var(--border); height: 64px; display: flex; align-items: center; background: white; position: sticky; top: 0; z-index: 100; }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { font-weight: 800; text-decoration: none; color: var(--text-main); font-size: 1.25rem; }
+        .logo span { color: var(--primary); }
+        .nav-links a { margin-left: 24px; text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 0.9rem; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+        .hero { padding: 100px 0; background: var(--bg-dark); color: white; position: relative; overflow: hidden; }
+        .hero-content { position: relative; z-index: 2; }
+        .hero h1 { font-size: 4rem; font-weight: 800; margin-bottom: 24px; letter-spacing: -0.03em; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 1.25rem; color: #94A3B8; max-width: 600px; margin-bottom: 40px; }
 
-        .sticky-nav {
-            position: sticky; top: 0; width: 100%; background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
-            z-index: 1000; padding: 1rem 0;
-        }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 64px; }
+        .feature-card { padding: 40px; border: 1px solid var(--border); border-radius: 12px; transition: all 0.2s; }
+        .feature-card:hover { border-color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .feature-card h3 { margin-bottom: 16px; font-size: 1.25rem; }
+        
+        .code-block { background: #161B22; padding: 32px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #E6EDF3; margin-top: 40px; border: 1px solid #30363D; }
+        .keyword { color: #FF7B72; }
+        .func { color: #D2A8FF; }
+        .string { color: #A5D6FF; }
 
-        .nav-container {
-            max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .stats-section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+        .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
 
-        .nav-logo {
-            font-weight: 800; font-size: 1.25rem; color: var(--text-primary);
-            text-decoration: none; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem;
-        }
+        .enterprise-box { background: #F8FAFC; padding: 64px; border-radius: 20px; margin: 80px 0; border: 1px solid var(--border); }
+        .enterprise-box h2 { margin-bottom: 24px; font-size: 2rem; }
 
-        .nav-logo span { color: var(--accent); }
-
-        .nav-links { display: flex; gap: 1rem; }
-
-        .nav-links a {
-            color: var(--text-secondary); text-decoration: none; font-size: 0.875rem;
-            font-weight: 500; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); transition: var(--transition);
-        }
-
-        .nav-links a:hover { background: var(--bg-tertiary); color: var(--accent); }
-
-        .nav-links a.active { background: var(--accent-soft); color: var(--accent); }
-
-        .hero {
-            padding: 6rem 0 4rem; text-align: center;
-            background: radial-gradient(circle at 50% 0%, var(--accent-soft) 0%, transparent 70%);
-        }
-
-        .hero-badge {
-            display: inline-flex; align-items: center; padding: 0.5rem 1rem;
-            background: var(--bg-primary); border: 1px solid var(--border);
-            border-radius: 99px; font-size: 0.75rem; font-weight: 600; color: var(--accent);
-            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2rem; box-shadow: var(--shadow-sm);
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1;
-            letter-spacing: -0.03em; margin-bottom: 1.5rem; color: var(--text-primary);
-        }
-
-        .hero-title span { color: var(--accent); }
-
-        .hero-desc { font-size: 1.125rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
-
-        .section-padding { padding: 5rem 0; }
-
-        .architect-card {
-            background: var(--bg-primary); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); padding: 3rem; display: flex; gap: 3rem; align-items: center; box-shadow: var(--shadow-md);
-        }
-
-        .architect-image {
-            width: 120px; height: 120px; background: var(--bg-tertiary); border-radius: 50%;
-            flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--accent); border: 4px solid var(--accent-soft);
-        }
-
-        .architect-content h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-
-        .architect-role { font-weight: 600; color: var(--accent); margin-bottom: 1rem; display: block; }
-
-        .architect-stats { display: flex; gap: 2rem; }
-
-        .stat-item { display: flex; flex-direction: column; }
-
-        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); }
-
-        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-
-        .story-section { background: var(--bg-secondary); }
-
-        .section-header { text-align: center; margin-bottom: 4rem; }
-
-        .section-tag { color: var(--accent); font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; display: block; }
-
-        .section-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; }
-
-        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-
-        .matrix-card {
-            background: var(--bg-primary); border: 1px solid var(--border);
-            border-radius: var(--radius-md); padding: 2.5rem; transition: var(--transition);
-        }
-
-        .agent-icon {
-            width: 48px; height: 48px; background: var(--accent-soft); color: var(--accent);
-            border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;
-        }
-
-        .matrix-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; }
-
-        .matrix-card p { font-size: 0.875rem; color: var(--text-muted); }
-
-        .deep-dive { background: var(--bg-tertiary); }
-
-        .tech-box {
-            background: #1e293b; color: #f8fafc; border-radius: var(--radius-md);
-            padding: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; box-shadow: var(--shadow-lg); overflow-x: auto;
-        }
-
-        footer { padding: 4rem 0; border-top: 1px solid var(--border); background: var(--bg-primary); text-align: center; }
-
-        .footer-logo { font-weight: 800; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        footer { padding: 48px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero-title { font-size: 3rem; }
-            .architect-card { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
-
 <body>
 
-    <nav class="sticky-nav">
-        <div class="nav-container">
-            <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/" class="nav-logo">AI-<span>CLAW</span>-ECOSYSTEM</a>
-            <div class="nav-links">
-                <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/">Hub</a>
-                <a href="https://mk-knight23.github.io/AI-Agent-OpenClaw/">OpenClaw</a>
-                <a href="#" class="active">ZeroClaw</a>
-                <a href="https://mk-knight23.github.io/AI-Agent-NanoClaw/">NanoClaw</a>
-                <a href="https://mk-knight23.github.io/AI-Agent-PicoClaw/">PicoClaw</a>
-                <a href="https://mk-knight23.github.io/AI-Agent-Nanobot/">Nanobot</a>
+<nav>
+    <div class="container nav-inner">
+        <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/" class="logo">Zero<span>Claw</span></a>
+        <div class="nav-links">
+            <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/">Hub</a>
+            <a href="#">Performance</a>
+            <a href="#">Security</a>
+            <a href="https://github.com/zeroclaw-labs/zeroclaw">GitHub</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container hero-content">
+        <h1>Safety. <span>Blazing Fast.</span></h1>
+        <p>A high-performance Rust security daemon delivering sub-10ms auditing and identity rotation for mission-critical AI matrix operations.</p>
+        <div class="code-block">
+            <pre><span class="keyword">use</span> zeroclaw::prelude::*;
+
+<span class="keyword">fn</span> <span class="func">main</span>() {
+    <span class="keyword">let</span> auditor = Auditor::<span class="func">new</span>(Config::<span class="func">default</span>());
+    auditor.<span class="func">start_rotation</span>(<span class="string">"8ms"</span>);
+    auditor.<span class="func">enforce_safety</span>();
+}</pre>
+        </div>
+    </div>
+</header>
+
+<section class="stats-section container">
+    <div class="stat-grid">
+        <div>
+            <div class="stat-value">8ms</div>
+            <div class="stat-label">Latencies</div>
+        </div>
+        <div>
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Memory Safe</div>
+        </div>
+        <div>
+            <div class="stat-value">64k</div>
+            <div class="stat-label">Audits/Sec</div>
+        </div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Vulnerabilities</div>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 80px 0;">
+    <div style="text-align: center; margin-bottom: 64px;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Core Security Pillars</h2>
+        <p style="color: var(--text-muted);">Engineered for environments where failure is not an option.</p>
+    </div>
+    <div class="grid">
+        <div class="feature-card">
+            <h3>Memory Safety</h3>
+            <p>Leveraging Rust's ownership model to eliminate null pointers and buffer overflows entirely.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Identity Rotation</h3>
+            <p>Autonomous rotation of API keys and session tokens every 8 minutes to prevent lateral movement.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Kernel Auditing</h3>
+            <p>Direct integration with eBPF for real-time monitoring of system calls and network traffic.</p>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <div class="enterprise-box">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+            <div>
+                <h2>Kazi's Security Auditor</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 24px;">At Wipro, Kazi deploys ZeroClaw as the ultimate watchdog. It continuously monitors the 134-agent fleet, ensuring that no agent diverges from the safety-critical RALPH protocols.</p>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">By utilizing ZeroClaw's 8ms performance, Kazi maintains a zero-trust architecture without compromising on development velocity.</p>
+            </div>
+            <div class="code-block" style="margin-top: 0;">
+                <pre><span class="comment">// Audit Log Excerpt</span>
+[INFO] Rotation complete (7.92ms)
+[WARN] Agent-12 behavior deviate
+[ACTN] Isolating Agent-12...
+[INFO] Re-aligning logic via RALPH
+[SAFE] System integrity 100%</pre>
             </div>
         </div>
-    </nav>
+    </div>
+</section>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-badge">Security Guardian</div>
-                <h1 class="hero-title">High-Performance<br><span>Safety Logic.</span></h1>
-                <p class="hero-desc">ZeroClaw is the performance-critical security daemon of the ecosystem, providing sub-10ms latency checks and memory-safe execution.</p>
-            </div>
-        </section>
-
-        <section class="section-padding container">
-            <div class="architect-card">
-                <div class="architect-image">KM</div>
-                <div class="architect-content">
-                    <span class="architect-role">The Lead Architect</span>
-                    <h2>Kazi Musharraf</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">AI Engineer & Project Engineer @ Wipro. Creator of the 134-Agent RALPH System.</p>
-                    <div class="architect-stats">
-                        <div class="stat-item">
-                            <span class="stat-value">8ms</span>
-                            <span class="stat-label">Latency</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">100%</span>
-                            <span class="stat-label">Memory Safe</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-padding story-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Integration Story</span>
-                    <h2 class="section-title">Mission-Critical Security</h2>
-                </div>
-                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem;">In Wipro's internal cloud infrastructure, ZeroClaw acts as the ultimate security gatekeeper. Built in Rust for maximum memory safety, it performs real-time security audits on every agent-triggered deployment.</p>
-                    <p style="font-size: 1.1rem; color: var(--text-secondary);">With a sub-10ms response time, ZeroClaw ensures that the high velocity of the 134-agent fleet never compromises the integrity of Wipro's enterprise data. It is the "zero-trust" guardian of the matrix.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-padding container">
-            <div class="section-header">
-                <span class="section-tag">Capabilities Matrix</span>
-                <h2 class="section-title">Security Core</h2>
-            </div>
-            <div class="matrix-grid">
-                <div class="matrix-card">
-                    <div class="agent-icon">🔒</div>
-                    <h3>Kernel Auditing</h3>
-                    <p>Deep-level system audit trails to prevent unauthorized agent behavior in restricted environments.</p>
-                </div>
-                <div class="matrix-card">
-                    <div class="agent-icon">⚡</div>
-                    <h3>Native Speed</h3>
-                    <p>Compiled binaries for bare-metal performance, handling millions of requests with minimal overhead.</p>
-                </div>
-                <div class="matrix-card">
-                    <div class="agent-icon">☣️</div>
-                    <h3>Isolation</h3>
-                    <p>Strict sandboxing of experimental agent logic to prevent side-effects in production clusters.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-padding deep-dive">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Technical Deep Dive</span>
-                    <h2 class="section-title">Rust Implementation</h2>
-                </div>
-                <div class="tech-box">
-                    <pre style="color: #f8fafc;">
-<span style="color: #64748b;">// ZeroClaw Security Daemon</span>
-<span style="color: #38bdf8;">use</span> claw_security::Guard;
-
-<span style="color: #38bdf8;">fn</span> <span style="color: #fbbf24;">main</span>() {
-    <span style="color: #38bdf8;">let</span> guard = Guard::<span style="color: #fbbf24;">new</span>(<span style="color: #34d399;">"mission-critical"</span>);
-    
-    guard.<span style="color: #fbbf24;">audit</span>(|event| {
-        <span style="color: #38bdf8;">match</span> event.risk_level() {
-            Risk::Zero => <span style="color: #38bdf8;">Ok</span>(()),
-            _ => <span style="color: #38bdf8;">Err</span>(SecurityError::Violation),
-        }
-    });
-}
-                    </pre>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-logo">AI-<span>CLAW</span>-ECOSYSTEM</div>
-            <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem;">Authorized by Kazi Musharraf • ZeroClaw V2.5 • © 2025</p>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--border-soft);">
-                BUILT BY HUMANS • POWERED BY AI
-            </div>
-        </div>
-    </footer>
+<footer>
+    <div class="container">
+        <p>&copy; 2025 ZeroClaw. Authorized by Kazi Musharraf. Built with Rust for Maximum Reliability.</p>
+    </div>
+</footer>
 
 </body>
-
 </html>
